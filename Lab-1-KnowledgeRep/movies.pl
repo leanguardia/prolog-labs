@@ -3005,6 +3005,15 @@ john_and_jeff(Movie):-
     actor(Movie, john_goodman, _),
     actor(Movie, jeff_bridges, _).
 
+% Part 2
+same_year(Movie1, Movie2, Year):-
+    movie(Movie1, Year), movie(Movie2, Year).
+
+co_star(A1, A2):-
+    (actor(Movie, A1, _); actress(Movie, A1, _)),
+	(actor(Movie, A2, _); actress(Movie, A2, _)),
+    A1 \= A2.
+
 
 
 
