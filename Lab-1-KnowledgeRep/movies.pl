@@ -2972,7 +2972,7 @@ actor(untitled_woody_allen_fall_project_2006, colin_salmon, '').
 movie(a_view_from_the_bridge, 2006).
 actress(a_view_from_the_bridge, scarlett_johansson, catherine).
 actor(a_view_from_the_bridge, anthony_lapaglia, eddie_carbone).
- 
+
 % a. In which year was the movie American Beauty released? 
 % movie(american_beauty, Year).
 % b. Find the movies released in the year 2000.
@@ -2981,8 +2981,36 @@ actor(a_view_from_the_bridge, anthony_lapaglia, eddie_carbone).
 before_2000(Movie, Year):- movie(Movie, Year), Year < 2000.
 % d. Find the movies released after 1990.
 after_1990(Movie, Year):- movie(Movie, Year), Year > 1990.
-% e. Find an actor who has appeared in more than one movie.
+% (!) e. Find an actor who has appeared in more than one movie.
+
 % f. Find a director of a movie in which Scarlett Johansson appeared.
+scarletts_director(Director, Movie):-
+    director(Movie, Director),
+    actress(Movie, scarlett_johansson, _Role).
 % g. Find an actor who has also directed a movie.
+
+actor_director(ActorDirector):- 
+    director(Movie, ActorDirector),
+    actor(Movie, ActorDirector, _Role).
+
 % h. Find an actor or actress who has also directed a movie.
+actoress_director(ActorDirector, Movie):- 
+    director(Movie, ActorDirector),
+    actor(Movie, ActorDirector, _);
+    actress(Movie, ActorDirector, _).
+
 % i. Find the movie in which John Goodman and Jeff Bridges were co-stars.
+
+john_and_jeff(Movie):-
+    actor(Movie, john_goodman, _),
+    actor(Movie, jeff_bridges, _).
+
+
+
+
+
+
+
+
+
+
