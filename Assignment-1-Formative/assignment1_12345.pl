@@ -26,3 +26,29 @@ q5_corner_move2 :-
   ailp_show_move(p(1,1), p(N,1)),
   ailp_show_move(p(N,1), p(N,N)),
   ailp_show_move(p(N,N), p(1,N)).
+
+q6_spiral(R) :- ailp_start_position(P),
+  ailp_show_move(P, p(1,1)),
+  q6_spiral(p(1,1), e, [p(1,1)], X),
+  reverse(X, R),
+  !.
+
+q6_spiral(_, _, R, R) :- complete(R).
+q6_spiral(P, M, Ps, R) :- new_pos(P, M, P1),
+  \+ memberchk(P1, Ps),
+  ailp_show_move(P, P1),
+  term_to_atom([P1|Ps], PsA),
+  % switch(headless, H),
+  % ( H -> true
+  % ;      do_command([mower,console,PsA],_R)
+  % ),
+
+q6_spiral(P1, M, [P1|Ps], R).
+
+q6_spiral(P, M, Ps, R) :- turn(M, M1),
+  q6_spiral(P, M1, Ps, R).
+
+turn(n, e).
+turn(e, s).
+turn(s, w).
+turn(w, n).
