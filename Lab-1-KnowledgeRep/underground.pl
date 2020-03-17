@@ -20,17 +20,27 @@ reachable_with_2(X,Y,[Z1,Z2|Zs]):-connected(X,Z1,_),
 
 link(X,Y):-connected(X,Y,_);connected(Y,X,_).
 
-path([], _Y, _Zs).
-path([X|Xs],Y,Zs):-
-    link(X,Y),
-    \+member(X,Zs),
-    path(Xs,Y,[X|Zs]).
+% Having the member check after the recursieve call
+% might result in very inefficient solutions
+% or even infinite loops
+% Even though the semantics is correct.
+npath(X,Y,[]) :- link(X,Y).
+npath(X,Y,[Z|R]) :- link(X,Z), Z\=Y, npath(Z,Y,R), \+ member(Z,R).
+
+% Get filter before the recursive call
+% This one generates all possible paths
+path(X,[X|Xs],[X|Xs]).
+path(X,[Y|Ys],Zs) :- X\=Y, link(Z,Y), \+ member(Z,[Y|Ys]), path(X,[Z,Y|Ys],Zs).
+% Z is something that exists, it will check all possible links.
 
 /** <examples>
 ?- reachable(bond_street, piccadilly_circus, [A,B|Cs]).
 ?- reachable(piccadilly_circus, bond_street, [A,B|Cs]).
 ?- link(bond_street,oxford_circus).
 ?- link(oxford_circus,bond_street).
-?- path(bond_street,tottenham_court_road).
+?- npath(bond_street, leicester_square, Path).
+?- path(bond_street, [piccadilly_circus], P).
+?- path(bond_street, [piccadilly_circus], [A,B,C,D|P]).
+?- trace, path(bond_street,[piccadilly_circus],Z).
 */
 
