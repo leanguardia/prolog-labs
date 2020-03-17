@@ -19,3 +19,18 @@ reachable_with_2(X,Y,[Z1,Z2|Zs]):-connected(X,Z1,_),
     							reachable(Z2,Y,Zs).
 
 link(X,Y):-connected(X,Y,_);connected(Y,X,_).
+
+path([], _Y, _Zs).
+path([X|Xs],Y,Zs):-
+    link(X,Y),
+    \+member(X,Zs),
+    path(Xs,Y,[X|Zs]).
+
+/** <examples>
+?- reachable(bond_street, piccadilly_circus, [A,B|Cs]).
+?- reachable(piccadilly_circus, bond_street, [A,B|Cs]).
+?- link(bond_street,oxford_circus).
+?- link(oxford_circus,bond_street).
+?- path(bond_street,tottenham_court_road).
+*/
+
