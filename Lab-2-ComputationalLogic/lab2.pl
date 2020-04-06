@@ -20,6 +20,8 @@ sumlisth([h|t],S):-sumlisth(t,h+S). % is this OK.?
 %sumlisth2([n],n).
 %sumlisth2([H|T],S):- , Sum is H+Ssumlisth2([T],Sum).
 
+% using the IS predicate needs the right side to have something concrete to work.
+
 suffixh(L,L).
 suffixh([_|T],L):-suffixh(T,L). 
 
