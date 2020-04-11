@@ -20,17 +20,21 @@ action(LeftBank, _, Direction) :-
 % cross([LeftH|LeftT]):-safe(With).
 % return()
 
-%find_travels(LeftBank, RightBank, T) :- length(RightBank,3).
-%find_travels([LH|LT], [RH|RT], T) :- 
-%	action(LeftBank, RightBank, Direction),
-%	( Direction = way    -> is_safe(LT), cross(LeftBank,RightBank,)
-%    ; Direction = return -> is_safe(RightBank), 
-	% ),
-	% find_travels(LeftBank,RightBank,T).
+find_travels(_LeftBank, RightBank, _T) :- length(RightBank,4).
+find_travels(LeftBank, RightBank, T) :- % Add Negative case in each travel
+	action(LeftBank, RightBank, Direction),
+	( Direction = way    -> delete(LeftBank,man,[LH|LT]),
+        					is_safe(LT),
+        					find_travels(LT,[man,LH|RightBank],T+1)
+    ; Direction = return -> delete(RightBank,man,[RH|RT]),
+        					is_safe(RT),
+        					find_travels([man,RH|LeftBank],RT,T+1)
+	).
+
 
 /** <examples>
 ?- is_safe([rye,fox]).
-?- find_travelers([man,fox]).
+?- find_travels([man,fox],[],0).
 ?- action([man,fox,hen,rye],[],Travels).
 ?- findall(E, element(E), List).
 */
